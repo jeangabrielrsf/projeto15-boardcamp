@@ -53,4 +53,17 @@ app.post("/categories", async (req, res) => {
 	}
 });
 
+app.get("/games", async (req, res) => {
+	try {
+		const gamesList = await connection.query(`
+            SELECT * FROM games;
+        `);
+
+		return res.send(gamesList.rows);
+	} catch (error) {
+		console.log(error);
+		return res.sendStatus(500);
+	}
+});
+
 app.listen(4000, () => console.log("Listening on port 4000..."));
