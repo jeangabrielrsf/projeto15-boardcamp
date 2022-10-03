@@ -2,9 +2,21 @@ import connection from "../database/database.js";
 
 async function listGames(req, res) {
 	try {
-		const gamesList = await connection.query(`
+		let {name} = req.query;
+
+		name = name.replace(name[0], name[0].toUpperCase());
+
+		let gamesList;
+		if (name) {
+			gamesList = await connection.query(`
+            SELECT * FROM games WHERE games.name LIKE $1;
+        `, [`${name}%`]);
+		} else {
+			gamesList = await connection.query(`
             SELECT * FROM games;
         `);
+		}
+		
 
 		return res.send(gamesList.rows);
 	} catch (error) {
