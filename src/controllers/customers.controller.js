@@ -1,4 +1,8 @@
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat.js";
 import connection from "../database/database.js";
+
+dayjs.extend(customParseFormat);
 
 async function listCustomers(req, res) {
 	try {
@@ -49,14 +53,17 @@ async function searchCustomer(req, res) {
 
 async function insertCustomer(req, res) {
 	try {
+
 		const { name, phone, cpf, birthday } = req.body;
 		console.log(name, phone, cpf, birthday);
+
 
 		if (
 			name.length === 0 ||
 			cpf.length != 11 ||
 			phone.length < 10 ||
-			phone.length > 11
+			phone.length > 11 ||
+            dayjs(birthday, "YYYY-MM-DD").isValid() == false
 		) {
 			return res.sendStatus(400);
 		}
@@ -92,7 +99,8 @@ async function updateCustomer (req,res) {
 			name.length === 0 ||
 			cpf.length != 11 ||
 			phone.length < 10 ||
-			phone.length > 11
+			phone.length > 11 ||
+            dayjs(birthday, "YYYY-MM-DD").isValid() == false
 		) {
 			return res.sendStatus(400);
 		}
