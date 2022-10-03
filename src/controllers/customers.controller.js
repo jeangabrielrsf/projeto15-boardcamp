@@ -36,6 +36,10 @@ async function searchCustomer(req, res) {
 			[id]
 		);
 
+        if (check.rowCount === 0) {
+            return res.sendStatus(404);
+        }
+
 		return res.send(check.rows);
 	} catch (error) {
 		console.log(error);
